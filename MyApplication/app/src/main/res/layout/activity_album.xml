@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/albumlayout"
-    tools:context="com.jboc.ztkmk.myapplication.com.example.ztkmk.mapcam.activities.AlbumActivity">
+    tools:context="com.jboc.mapcam.activities.AlbumActivity">
 
     <TextView
         android:id="@+id/textView"

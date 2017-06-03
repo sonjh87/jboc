@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/mainlayout"
-    tools:context="com.jboc.ztkmk.myapplication.com.example.ztkmk.mapcam.MainActivity">
+    tools:context="com.jboc.mapcam.MainActivity">
 
     <TextView
         android:layout_width="wrap_content"
