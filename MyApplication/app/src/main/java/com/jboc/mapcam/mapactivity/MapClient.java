@@ -1,4 +1,4 @@
-package com.example.ztkmk.myapplication.mapactivity;
+package com.jboc.mapcam.mapactivity;
 
 import android.location.Location;
 import android.os.Message;

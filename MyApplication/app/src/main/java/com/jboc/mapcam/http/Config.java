@@ -1,4 +1,4 @@
-package com.example.ztkmk.myapplication.http;
+package com.jboc.mapcam.http;
 
 public class Config {
 	// File upload url : localhost 나 127.0.0.1로 하면 refused 됨. cmd창에서 ipconfig로 ip 주소 알아내어 변경하자.

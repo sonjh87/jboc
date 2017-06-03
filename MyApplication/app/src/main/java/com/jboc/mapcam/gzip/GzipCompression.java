@@ -1,4 +1,4 @@
-package com.example.ztkmk.myapplication.gzip;
+package com.jboc.mapcam.gzip;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;

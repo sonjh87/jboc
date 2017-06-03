@@ -1,4 +1,4 @@
-package com.example.ztkmk.myapplication;
+package com.jboc.mapcam;
 
 import android.content.Intent;
 import android.support.constraint.ConstraintLayout;
@@ -6,7 +6,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
-import com.example.ztkmk.myapplication.activities.AlbumActivity;
+import com.jboc.mapcam.activities.AlbumActivity;
+import com.jboc.ztkmk.myapplication.R;
 
 public class MainActivity extends AppCompatActivity{
 

@@ -1,4 +1,4 @@
-package com.example.ztkmk.myapplication.activities;
+package com.jboc.mapcam.activities;
 
 import android.app.Activity;
 import android.content.pm.PackageManager;
@@ -11,8 +11,8 @@ import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 
-import com.example.ztkmk.myapplication.R;
-import com.example.ztkmk.myapplication.mapactivity.MapClient;
+import com.jboc.ztkmk.myapplication.R;
+import com.jboc.mapcam.mapactivity.MapClient;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationListener;

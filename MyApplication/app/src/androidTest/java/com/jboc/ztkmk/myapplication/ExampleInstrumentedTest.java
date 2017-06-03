@@ -1,4 +1,4 @@
-package com.example.ztkmk.myapplication;
+package com.jboc.ztkmk.myapplication;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

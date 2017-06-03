@@ -1,4 +1,4 @@
-package com.example.ztkmk.myapplication;
+package com.jboc.ztkmk.myapplication;
 
 import org.junit.Test;
 

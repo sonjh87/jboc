@@ -1,4 +1,4 @@
-package com.example.ztkmk.myapplication.activities;
+package com.jboc.mapcam.activities;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -18,7 +18,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.ztkmk.myapplication.R;
+import com.jboc.ztkmk.myapplication.R;
 
 import java.io.File;
 import java.io.IOException;

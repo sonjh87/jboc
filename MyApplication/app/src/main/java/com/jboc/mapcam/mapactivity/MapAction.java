@@ -1,4 +1,4 @@
-package com.example.ztkmk.myapplication.mapactivity;
+package com.jboc.mapcam.mapactivity;
 
 import android.graphics.Bitmap;
 import android.os.Handler;

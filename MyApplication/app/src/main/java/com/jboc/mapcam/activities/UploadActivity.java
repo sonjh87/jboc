@@ -1,4 +1,4 @@
-package com.example.ztkmk.myapplication.activities;
+package com.jboc.mapcam.activities;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -16,10 +16,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.ztkmk.myapplication.MainActivity;
-import com.example.ztkmk.myapplication.R;
-import com.example.ztkmk.myapplication.http.Config;
-import com.example.ztkmk.myapplication.http.HttpConnector;
+import com.jboc.mapcam.MainActivity;
+import com.jboc.mapcam.http.Config;
+import com.jboc.mapcam.http.HttpConnector;
+import com.jboc.ztkmk.myapplication.R;
 
 import java.io.BufferedInputStream;
 import java.io.File;
