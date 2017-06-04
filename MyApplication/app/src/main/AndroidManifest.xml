@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.jboc.ztkmk.myapplication">
+    package="com.jboc.mapcam">
 
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -16,6 +17,17 @@
             </intent-filter>
         </activity>
         <activity android:name="com.jboc.mapcam.activities.AlbumActivity" />
+        <activity android:name="com.jboc.mapcam.activities.HomeActivity" />
+        <activity android:name="com.jboc.mapcam.activities.GoogleMapActivity" />
+
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
+
     </application>
 
 </manifest>

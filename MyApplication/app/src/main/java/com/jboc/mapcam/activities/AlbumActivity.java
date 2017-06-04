@@ -18,7 +18,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.jboc.ztkmk.myapplication.R;
+import com.jboc.mapcam.MainActivity;
+import com.jboc.mapcam.R;
 
 import java.io.File;
 import java.io.IOException;
@@ -39,8 +40,6 @@ public class AlbumActivity extends AppCompatActivity implements View.OnClickList
     ImageView iv;
     Dialog dialog;
 
-    private ConstraintLayout constraintLayout;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -53,23 +52,7 @@ public class AlbumActivity extends AppCompatActivity implements View.OnClickList
         //사진올리기 버튼클릭
         findViewById(R.id.getCustom).setOnClickListener(this);
 
-        //GoogleMap Activity 불러오기 위한 작업
-        constraintLayout = (ConstraintLayout) findViewById(R.id.albumlayout);
-        constraintLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-
-                    Intent intent = new Intent(AlbumActivity.this, GoogleMapActivity.class);
-                    startActivity(intent);
-                    AlbumActivity.this.finish();
-
-                } catch (Exception e){
-
-                    e.printStackTrace();
-                }
-            }
-        });
+        MainActivity.SetButton(this, R.id.home_button_album, R.id.album_button_album, R.id.map_button_album);
     }
 
     @Override

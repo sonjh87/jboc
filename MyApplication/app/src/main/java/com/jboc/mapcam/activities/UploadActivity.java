@@ -19,7 +19,7 @@ import android.widget.Toast;
 import com.jboc.mapcam.MainActivity;
 import com.jboc.mapcam.http.Config;
 import com.jboc.mapcam.http.HttpConnector;
-import com.jboc.ztkmk.myapplication.R;
+import com.jboc.mapcam.R;
 
 import java.io.BufferedInputStream;
 import java.io.File;

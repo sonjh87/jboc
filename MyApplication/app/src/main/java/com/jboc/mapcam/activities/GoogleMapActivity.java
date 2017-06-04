@@ -1,6 +1,5 @@
 package com.jboc.mapcam.activities;
 
-import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
@@ -9,9 +8,15 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 
-import com.jboc.ztkmk.myapplication.R;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
+import com.jboc.mapcam.MainActivity;
+import com.jboc.mapcam.R;
 import com.jboc.mapcam.mapactivity.MapClient;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -24,7 +29,7 @@ import com.google.android.gms.maps.MapFragment;
  * Created by Ztkmk on 2017-05-27.
  */
 
-public class GoogleMapActivity extends Activity
+public class GoogleMapActivity extends FragmentActivity
         implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
@@ -39,7 +44,17 @@ public class GoogleMapActivity extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_googlemap);
 
-        InitGoogleApiClient();
+        MainActivity.SetButton(this, R.id.home_button_map, R.id.album_button_map, R.id.map_button_map);
+
+        //InitGoogleApiClient();
+        MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.googleMap);
+        mapFragment.getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(GoogleMap googleMap) {
+
+                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(0, 0), 17.0f));
+            }
+        });
     }
 
     @Override
@@ -62,6 +77,7 @@ public class GoogleMapActivity extends Activity
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.ACCESS_FINE_LOCATION)){
 
                 ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+
             } else {
 
                 ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 1);
@@ -86,8 +102,8 @@ public class GoogleMapActivity extends Activity
             return;
         }
 
-        MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.googleMap);
-        mapClient = new MapClient(location, mapFragment);
+        //MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.googleMap);
+        //mapClient = new MapClient(location, mapFragment);
     }
 
     @Override
