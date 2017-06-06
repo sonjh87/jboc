@@ -93,7 +93,7 @@ public class TestLoadImageClass {
             return arrayList;
 
         } else {
-            
+
             return null;
         }
     }

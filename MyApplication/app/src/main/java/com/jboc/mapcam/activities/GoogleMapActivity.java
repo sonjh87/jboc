@@ -24,6 +24,7 @@ import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.MapFragment;
+import com.jboc.mapcam.mapactivity.TestLoadImageClass;
 
 /**
  * Created by Ztkmk on 2017-05-27.
@@ -46,15 +47,18 @@ public class GoogleMapActivity extends FragmentActivity
 
         MainActivity.SetButton(this, R.id.home_button_map, R.id.album_button_map, R.id.map_button_map);
 
-        //InitGoogleApiClient();
-        MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.googleMap);
+        //TestLoadImageClass testLoadImageClass = new TestLoadImageClass();
+
+
+        InitGoogleApiClient();
+        /*MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.googleMap);
         mapFragment.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap googleMap) {
 
                 googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(0, 0), 17.0f));
             }
-        });
+        });*/
     }
 
     @Override
@@ -92,6 +96,8 @@ public class GoogleMapActivity extends FragmentActivity
             }
         }
 
+        CreateLocationRequest();
+
         Location location = LocationServices.FusedLocationApi.
                 getLastLocation(googleApiClient);
 
@@ -102,8 +108,8 @@ public class GoogleMapActivity extends FragmentActivity
             return;
         }
 
-        //MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.googleMap);
-        //mapClient = new MapClient(location, mapFragment);
+        MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.googleMap);
+        mapClient = new MapClient(location, mapFragment);
     }
 
     @Override
@@ -129,11 +135,6 @@ public class GoogleMapActivity extends FragmentActivity
 
     private void InitGoogleApiClient(){
 
-        locationRequest = LocationRequest.create()
-                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-                .setInterval(10 * 1000)
-                .setFastestInterval(1 * 1000);
-
         if (googleApiClient == null){
 
             googleApiClient = new GoogleApiClient
@@ -146,6 +147,22 @@ public class GoogleMapActivity extends FragmentActivity
             googleApiClient.connect();
             super.onStart();
         }
+    }
+
+    private void CreateLocationRequest() {
+
+        //remove location updates so that it resets
+        LocationServices.FusedLocationApi.removeLocationUpdates(googleApiClient, this);
+
+        //import should be **import com.google.android.gms.location.LocationListener**;
+        locationRequest = LocationRequest.create()
+                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
+                .setInterval(10 * 1000)
+                .setFastestInterval(1 * 1000);
+
+        //restart location updates with the new interval
+        //Already get the permission dont worry bout this
+        LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, this);
     }
 
 
