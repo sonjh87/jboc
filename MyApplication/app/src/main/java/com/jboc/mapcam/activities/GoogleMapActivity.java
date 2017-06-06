@@ -160,6 +160,6 @@ public class GoogleMapActivity extends FragmentActivity
     private void GetImageFromServer(LatLng latLng) {
 
         //TODO - Change Code Here to Get From Server
-        testLoadImageClass = new TestLoadImageClass(latLng, getResources(), R.drawable.ic_action_name);
+        testLoadImageClass = new TestLoadImageClass(latLng, getResources(), R.mipmap.ic_launcher);
     }
 }
