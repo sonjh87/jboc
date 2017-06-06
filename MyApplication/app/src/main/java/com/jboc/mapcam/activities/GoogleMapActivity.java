@@ -46,19 +46,7 @@ public class GoogleMapActivity extends FragmentActivity
         setContentView(R.layout.activity_googlemap);
 
         MainActivity.SetButton(this, R.id.home_button_map, R.id.album_button_map, R.id.map_button_map);
-
-        //TestLoadImageClass testLoadImageClass = new TestLoadImageClass();
-
-
         InitGoogleApiClient();
-        /*MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.googleMap);
-        mapFragment.getMapAsync(new OnMapReadyCallback() {
-            @Override
-            public void onMapReady(GoogleMap googleMap) {
-
-                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(0, 0), 17.0f));
-            }
-        });*/
     }
 
     @Override
@@ -97,7 +85,6 @@ public class GoogleMapActivity extends FragmentActivity
         }
 
         CreateLocationRequest();
-
         Location location = LocationServices.FusedLocationApi.
                 getLastLocation(googleApiClient);
 
@@ -108,8 +95,11 @@ public class GoogleMapActivity extends FragmentActivity
             return;
         }
 
+        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+        GetImageFromServer(latLng);
+
         MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.googleMap);
-        mapClient = new MapClient(location, mapFragment);
+        mapClient = new MapClient(latLng, mapFragment, testLoadImageClass);
     }
 
     @Override
@@ -165,5 +155,11 @@ public class GoogleMapActivity extends FragmentActivity
         LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, this);
     }
 
+    // It must be in the activity. (cause of getResources function and R.id)
+    private  TestLoadImageClass testLoadImageClass;
+    private void GetImageFromServer(LatLng latLng) {
 
+        //TODO - Change Code Here to Get From Server
+        testLoadImageClass = new TestLoadImageClass(latLng, getResources(), R.drawable.ic_action_name);
+    }
 }

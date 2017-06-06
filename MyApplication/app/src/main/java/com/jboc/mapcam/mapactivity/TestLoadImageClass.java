@@ -20,31 +20,22 @@ public class TestLoadImageClass {
 
     //latitude range (-90, 90)
     //longitude range (-180, 180)
-    double dMinX = 0d;
-    double dMaxX = 0d;
-    double dMinY = 0d;
-    double dMaxY = 0d;
+
+    private LatLng minLatLng;
+    private LatLng maxLatLng;
 
     private Point rangeLat = new Point();
     private Point rangeLng = new Point();
 
-    final double range = 10d;
+    final double range = 2d;
 
     final private HashMap<Point, ArrayList<ImageInfo>> imageHashMap = new HashMap<>();
 
     public TestLoadImageClass(LatLng latLng, Resources resources, int nImageId) {
 
-        dMinX = latLng.longitude - range;
-        if (dMinX < -180) dMinX += 360;
-
-        dMaxX = latLng.longitude + range;
-        if (dMaxX > 180) dMaxX -= 360d;
-
-        dMinY = latLng.latitude - range;
-        if (dMinY < -90) dMinY += 180d;
-
-        dMaxY = latLng.latitude + range;
-        if (dMaxY > 90) dMaxY -= 180d;
+        //TODO - Between Min and Max Have Some Problem.
+        minLatLng = new LatLng(latLng.latitude - range, latLng.longitude - range);
+        maxLatLng = new LatLng(latLng.latitude + range, latLng.longitude + range);
 
         rangeLat.set(
                 (int)((double) -180 / separateRange),
@@ -58,8 +49,8 @@ public class TestLoadImageClass {
         Bitmap bitmap = BitmapFactory.decodeResource(resources, nImageId);
         for (int i = 0; i < 100; i++) {
 
-            double latitude = ThreadLocalRandom.current().nextDouble(dMinY, dMaxY);
-            double longitude = ThreadLocalRandom.current().nextDouble(dMinX, dMaxX);
+            double latitude = ThreadLocalRandom.current().nextDouble(minLatLng.latitude, maxLatLng.latitude);
+            double longitude = ThreadLocalRandom.current().nextDouble(minLatLng.longitude, maxLatLng.longitude);
             LatLng imageLatLng = new LatLng(latitude, longitude);
             ImageInfo info = new ImageInfo(bitmap, imageLatLng);
             Point point = CalcAreaByLatLng(imageLatLng);
@@ -101,13 +92,27 @@ public class TestLoadImageClass {
     /**
      * Separate the Area By 0.1d of LatLng
      */
-    final private double separateRange = 0.1d;
-    private Point CalcAreaByLatLng(LatLng latLng) {
+    final static private double separateRange = 1d;
+    public static Point  CalcAreaByLatLng(LatLng latLng) {
+
+        int nLatIndex = (int)(latLng.latitude / separateRange);
+        int nLngIndex = (int)(latLng.longitude / separateRange);
+
+        return new Point(nLatIndex, nLngIndex);
+    }
+
+    /**
+     * 5 is Same Point
+     */
+    public static int IsSameArea(LatLng latLng, Point point) {
 
         int rangeX = (int)(latLng.longitude / separateRange);
         int rangeY = (int)(latLng.latitude / separateRange);
 
-        return new Point(rangeX, rangeY);
+        int sameX = (rangeX > point.x) ? 1 : ((rangeX == point.x) ? 0 : -1);
+        int sameY = (rangeY > point.y) ? 1 : ((rangeY == point.y) ? 0 : -1);
+
+        return (5 + sameX + sameY * 3);
     }
 
     /**

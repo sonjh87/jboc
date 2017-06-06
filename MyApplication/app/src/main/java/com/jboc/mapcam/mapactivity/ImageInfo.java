@@ -18,4 +18,7 @@ public class ImageInfo {
         this.bitmap = bitmap;
         this.latLng = latLng;
     }
+
+    public LatLng GetLatLng() { return latLng; }
+    public Bitmap GetBitmap() { return bitmap; }
 }

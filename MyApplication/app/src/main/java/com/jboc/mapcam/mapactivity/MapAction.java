@@ -20,6 +20,8 @@ import java.util.concurrent.ConcurrentHashMap;
 public class MapAction extends Handler {
 
     public static final int DEFAULT_HANDLER_MESSAGE = 1;
+    public static final int CHECK_USER_LATLNG = 2;
+    public static final int SHOW_IMAGE = 3;
 
     private GoogleMap googleMap;
     private final ConcurrentHashMap<LatLng, Bitmap> userImageHashMap
@@ -49,11 +51,19 @@ public class MapAction extends Handler {
         super.handleMessage(msg);
 
         switch (msg.what) {
-            case DEFAULT_HANDLER_MESSAGE:
+            case DEFAULT_HANDLER_MESSAGE: {
 
                 LatLng latLng = (LatLng) msg.obj;
+                break;
+            }
+
+            case SHOW_IMAGE: {
+
+                ImageInfo imageInfo = (ImageInfo) msg.obj;
+                AddNewIamageMarkerToGoogleMap(imageInfo.GetLatLng(), imageInfo.GetBitmap());
 
                 break;
+            }
 
             default:
                 break;
@@ -61,6 +71,10 @@ public class MapAction extends Handler {
     }
 
     private void AddNewIamageMarkerToGoogleMap(LatLng latLng, Bitmap bitmap) {
+
+        //좌료로만 체크한다 일단
+        if (mapMarkerMap.contains(latLng))
+            return;
 
         MarkerOptions options = new MarkerOptions();
         options
