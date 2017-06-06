@@ -40,8 +40,6 @@ public class MapClient implements OnMapReadyCallback, GoogleMap.OnCameraMoveList
 
         mapAction = new MapAction();
         mapImageProcessHandler = new MapImageProcessHandler(mapAction, testLoadImageClass);
-
-        InitImageFromServer();
     }
 
     @Override
@@ -50,6 +48,8 @@ public class MapClient implements OnMapReadyCallback, GoogleMap.OnCameraMoveList
         googleMap = map;
         mapAction.SetGoogleMap(googleMap);
         MoveCamera();
+
+        InitImageFromServer();
     }
 
     public void LocationChanged(final Location location) {
@@ -64,7 +64,7 @@ public class MapClient implements OnMapReadyCallback, GoogleMap.OnCameraMoveList
         //the desired zoom level, in the range of 2.0 to 21.0.
         //Values below this range are set to 2.0, and values above it are set to 21.0
         //Increase the value to zoom in. Not all areas have titles at the largest zoom levels.
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(positionInfo.GetLatLng(), 10.0f));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(positionInfo.GetLatLng(), 8.5f));
     }
 
     @Override
