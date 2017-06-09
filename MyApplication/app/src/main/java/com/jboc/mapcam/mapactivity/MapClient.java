@@ -1,6 +1,5 @@
 package com.jboc.mapcam.mapactivity;
 
-import android.graphics.Point;
 import android.location.Location;
 import android.os.Message;
 
@@ -9,10 +8,10 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
+import com.jboc.mapcam.threadhandler.MapAction;
+import com.jboc.mapcam.threadhandler.MapImageProcessHandler;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 
 /**
  * Created by Ztkmk on 2017-05-27.
@@ -28,33 +27,27 @@ public class MapClient implements OnMapReadyCallback, GoogleMap.OnCameraMoveList
     private Long lastClickedTime;
     private final MapFragment mapFragment;
 
-    private final MapAction mapAction;
-    private final MapImageProcessHandler mapImageProcessHandler;
-
-    public MapClient(LatLng latLng, MapFragment mapFragment, TestLoadImageClass testLoadImageClass) {
+    public MapClient(LatLng latLng, MapFragment mapFragment) {
 
         positionInfo = new PositionInfo(latLng);
         lastClickedTime = (new Date()).getTime();
         this.mapFragment = mapFragment;
         this.mapFragment.getMapAsync(this);
-
-        mapAction = new MapAction();
-        mapImageProcessHandler = new MapImageProcessHandler(mapAction, testLoadImageClass);
     }
 
     @Override
     public void onMapReady(final GoogleMap map) {
 
         googleMap = map;
-        mapAction.SetGoogleMap(googleMap);
+        MapAction.GetInstance().SetGoogleMap(googleMap);
         MoveCamera();
 
         InitImageFromServer();
     }
 
-    public void LocationChanged(final Location location) {
+    public void LocationChanged(final LatLng latLng) {
 
-        positionInfo.SetLatLng(new LatLng(location.getLatitude(), location.getLongitude()));
+        positionInfo.SetLatLng(latLng);
         MoveCamera();
         //UpdateImage(positionInfo.GetLatLng());
     }
@@ -85,7 +78,7 @@ public class MapClient implements OnMapReadyCallback, GoogleMap.OnCameraMoveList
         Message message = new Message();
         message.what = MapAction.DEFAULT_HANDLER_MESSAGE;
         message.obj = latLng;
-        mapAction.sendMessage(message);
+        MapAction.GetInstance().sendMessage(message);
     }
 
     private void InitImageFromServer() {
@@ -95,6 +88,6 @@ public class MapClient implements OnMapReadyCallback, GoogleMap.OnCameraMoveList
         message.obj= positionInfo;
         message.what = MapImageProcessHandler.GET_IMAGE;
 
-        mapImageProcessHandler.sendMessage(message);
+        MapImageProcessHandler.GetInstance().sendMessage(message);
     }
 }

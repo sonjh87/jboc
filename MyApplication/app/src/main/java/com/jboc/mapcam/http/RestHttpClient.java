@@ -19,7 +19,13 @@ import java.io.FileNotFoundException;
 public class RestHttpClient {
 
     //TODO - Have to Change Read From Property
-    static final private String BASE_URL = "https://api.twitter.com/1/";
+    static private String BASE_URL;
+
+    public static void SetServerInfo(String domain, int port) {
+
+        BASE_URL = String.format("http://%s:%d", domain, port);
+        Log.d("TAG", String.format("Server Base Url Init Done: %s", BASE_URL));
+    }
 
     private static AsyncHttpClient asyncHttpClient = new AsyncHttpClient();
 

@@ -27,11 +27,21 @@ public class TestLoadImageClass {
     private Point rangeLat = new Point();
     private Point rangeLng = new Point();
 
-    final double range = 2d;
+    private boolean bInit = false;
 
+    final private double range = 2d;
+    final private static TestLoadImageClass instance = new TestLoadImageClass();
     final private HashMap<Point, ArrayList<ImageInfo>> imageHashMap = new HashMap<>();
 
-    public TestLoadImageClass(LatLng latLng, Resources resources, int nImageId) {
+    private TestLoadImageClass() {}
+    public static TestLoadImageClass GetInstance() { return instance; }
+
+    public void Init(LatLng latLng, Resources resources, int nImageId) {
+
+        if (bInit)
+            return;
+
+        bInit = true;
 
         //TODO - Between Min and Max Have Some Problem.
         minLatLng = new LatLng(latLng.latitude - range, latLng.longitude - range);
@@ -87,6 +97,11 @@ public class TestLoadImageClass {
 
             return null;
         }
+    }
+
+    public void AddImage(Bitmap bitmap, LatLng latLng) {
+
+
     }
 
     /**

@@ -1,4 +1,4 @@
-package com.jboc.mapcam.mapactivity;
+package com.jboc.mapcam.threadhandler;
 
 import android.graphics.Bitmap;
 import android.os.Handler;
@@ -10,6 +10,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.jboc.mapcam.mapactivity.ImageInfo;
 
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -22,6 +23,10 @@ public class MapAction extends Handler {
     public static final int DEFAULT_HANDLER_MESSAGE = 1;
     public static final int CHECK_USER_LATLNG = 2;
     public static final int SHOW_IMAGE = 3;
+
+    final private static MapAction instance = new MapAction();
+    private MapAction() {}
+    public static MapAction GetInstance() { return instance; }
 
     private GoogleMap googleMap;
     private final ConcurrentHashMap<LatLng, Bitmap> userImageHashMap

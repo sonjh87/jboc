@@ -1,11 +1,13 @@
-package com.jboc.mapcam.mapactivity;
+package com.jboc.mapcam.threadhandler;
 
-import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.os.Handler;
 import android.os.Message;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.jboc.mapcam.mapactivity.ImageInfo;
+import com.jboc.mapcam.mapactivity.PositionInfo;
+import com.jboc.mapcam.mapactivity.TestLoadImageClass;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,22 +18,15 @@ import java.util.HashMap;
 
 public class MapImageProcessHandler extends Handler {
 
-    public static final int GET_IMAGE = 1;
-    public static final int CHECK_LATLNG = 2;
+    final public static int GET_IMAGE = 1;
+    final public static int CHECK_LATLNG = 2;
 
-    final private MapAction mapAction;
+    final private HashMap<Point, HashMap<LatLng, ImageInfo>> imageHashMap = new HashMap<>();
+    final private static MapImageProcessHandler instance = new MapImageProcessHandler();
+    private MapImageProcessHandler() {}
+    public static MapImageProcessHandler GetInstance() { return instance; }
 
-    //Test Code
-    final private TestLoadImageClass testLoadImageClass;
-    private final HashMap<Point, HashMap<LatLng, ImageInfo>> imageHashMap = new HashMap<>();
 
-    public MapImageProcessHandler(final MapAction mapAction, final TestLoadImageClass testLoadImageClass) {
-
-        this.mapAction = mapAction;
-        this.testLoadImageClass = testLoadImageClass;
-    }
-
-    //private
 
     @Override
     public void handleMessage(Message msg) {
@@ -43,7 +38,7 @@ public class MapImageProcessHandler extends Handler {
             case GET_IMAGE: {
 
                 PositionInfo positionInfo = (PositionInfo) msg.obj;
-                Point[] points = testLoadImageClass.GetAccessiblePoint(positionInfo.GetLatLng());
+                Point[] points = TestLoadImageClass.GetInstance().GetAccessiblePoint(positionInfo.GetLatLng());
                 positionInfo.SetPoint(points[4].x, points[4].y);
 
                 for (int i = 0; i< points.length; i++) {
@@ -88,7 +83,7 @@ public class MapImageProcessHandler extends Handler {
 
     private void GetImageFromServer(final Point point, final HashMap<LatLng, ImageInfo> infoHashMap) {
 
-        ArrayList<ImageInfo> imageInfos = testLoadImageClass.GetArrayImageByPoint(point);
+        ArrayList<ImageInfo> imageInfos = TestLoadImageClass.GetInstance().GetArrayImageByPoint(point);
         if (imageInfos == null)
             return;
 
@@ -121,7 +116,7 @@ public class MapImageProcessHandler extends Handler {
             message.what = MapAction.SHOW_IMAGE;
             message.obj = entry.getValue();
 
-            mapAction.sendMessage(message);
+            MapAction.GetInstance().sendMessage(message);
         }
     }
 }

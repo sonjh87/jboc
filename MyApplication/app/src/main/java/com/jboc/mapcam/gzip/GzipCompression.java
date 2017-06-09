@@ -46,6 +46,5 @@ public class GzipCompression {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 }

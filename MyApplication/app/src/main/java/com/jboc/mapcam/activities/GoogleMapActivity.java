@@ -11,12 +11,11 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.jboc.mapcam.MainActivity;
 import com.jboc.mapcam.R;
+import com.jboc.mapcam.googleservice.GpsCallbackInterface;
+import com.jboc.mapcam.googleservice.GpsClient;
 import com.jboc.mapcam.mapactivity.MapClient;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -30,13 +29,10 @@ import com.jboc.mapcam.mapactivity.TestLoadImageClass;
  * Created by Ztkmk on 2017-05-27.
  */
 
-public class GoogleMapActivity extends FragmentActivity
-        implements GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener, LocationListener {
+public class GoogleMapActivity extends FragmentActivity {
 
     private MapClient mapClient;
-    private GoogleApiClient googleApiClient;
-    private LocationRequest locationRequest;
+    private GpsClient googleApiClient;
 
     @RequiresApi(api = Build.VERSION_CODES.HONEYCOMB)
     @Override
@@ -46,120 +42,38 @@ public class GoogleMapActivity extends FragmentActivity
         setContentView(R.layout.activity_googlemap);
 
         MainActivity.SetButton(this, R.id.home_button_map, R.id.album_button_map, R.id.map_button_map);
+
         InitGoogleApiClient();
     }
 
-    @Override
-    public void onConnected(@Nullable Bundle bundle) {
-
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
-            //insertDummyContact();
-            return;
-        }
-
-        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.ACCESS_FINE_LOCATION)){
-
-                ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-
-            } else {
-
-                ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, 1);
-            }
-
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.ACCESS_COARSE_LOCATION)){
-
-                ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
-            } else {
-
-                ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_COARSE_LOCATION}, 1);
-            }
-        }
-
-        CreateLocationRequest();
-        Location location = LocationServices.FusedLocationApi.
-                getLastLocation(googleApiClient);
-
-        if (location == null) {
-
-            Log.d("TAG", "Error Execute GoogleAPIClient");
-            finish();
-            return;
-        }
-
-        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-        GetImageFromServer(latLng);
+    public void InitMapFragMent(LatLng latLng) {
 
         MapFragment mapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.googleMap);
-        mapClient = new MapClient(latLng, mapFragment, testLoadImageClass);
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-
-        Log.d("", String.format("%d", i));
-        finish();
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
-        Log.d("", connectionResult.getErrorMessage());
-        finish();
-    }
-
-    @Override
-    public void onLocationChanged(Location location) {
-
-        Log.d("TAG", "Location Changed");
-        mapClient.LocationChanged(location);;
+        mapClient = new MapClient(latLng, mapFragment);
     }
 
     private void InitGoogleApiClient(){
 
-        if (googleApiClient == null){
+        googleApiClient = new GpsClient(this, new GpsCallbackInterface() {
+            @Override
+            public void OnConnected(LatLng latLng) {
 
-            googleApiClient = new GoogleApiClient
-                    .Builder(this)
-                    .addConnectionCallbacks(this)
-                    .addOnConnectionFailedListener(this)
-                    .addApi(LocationServices.API)
-                    .build();
+                InitMapFragMent(latLng);
+                GetImageFromServer(latLng);
+            }
 
-            googleApiClient.connect();
-            super.onStart();
-        }
+            @Override
+            public void OnLocationChanged(LatLng latLng) {
+
+                mapClient.LocationChanged(latLng);
+            }
+        });
+        super.onStart();
     }
 
-    private void CreateLocationRequest() {
-
-        //remove location updates so that it resets
-        LocationServices.FusedLocationApi.removeLocationUpdates(googleApiClient, this);
-
-        //import should be **import com.google.android.gms.location.LocationListener**;
-        locationRequest = LocationRequest.create()
-                .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
-                .setInterval(10 * 1000)
-                .setFastestInterval(1 * 1000);
-
-        //restart location updates with the new interval
-        //Already get the permission dont worry bout this
-        LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, this);
-    }
-
-    // It must be in the activity. (cause of getResources function and R.id)
-    private  TestLoadImageClass testLoadImageClass;
     private void GetImageFromServer(LatLng latLng) {
 
         //TODO - Change Code Here to Get From Server
-        testLoadImageClass = new TestLoadImageClass(latLng, getResources(), R.mipmap.ic_launcher);
+
     }
 }
