@@ -1,4 +1,4 @@
-package com.jboc.ztkmk.myapplication;
+package com.jboc.mapcam;
 
 import org.junit.Test;
 

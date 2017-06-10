@@ -17,7 +17,7 @@ public class HomeProcessHandler extends Handler {
 
     final public static int GET_IMAGE_FROM_SERVER = 1;
 
-    final private static HomeProcessHandler instance = new HomeProcessHandler();
+    private static HomeProcessHandler instance;// = new HomeProcessHandler();
     private HomeProcessHandler() {}
     public static HomeProcessHandler GetInstance() { return instance; }
 

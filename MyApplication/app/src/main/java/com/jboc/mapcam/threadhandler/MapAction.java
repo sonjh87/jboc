@@ -24,7 +24,7 @@ public class MapAction extends Handler {
     public static final int CHECK_USER_LATLNG = 2;
     public static final int SHOW_IMAGE = 3;
 
-    final private static MapAction instance = new MapAction();
+    private static MapAction instance;// = new MapAction();
     private MapAction() {}
     public static MapAction GetInstance() { return instance; }
 

@@ -30,7 +30,7 @@ public class TestLoadImageClass {
     private boolean bInit = false;
 
     final private double range = 2d;
-    final private static TestLoadImageClass instance = new TestLoadImageClass();
+    private static TestLoadImageClass instance;// = new TestLoadImageClass();
     final private HashMap<Point, ArrayList<ImageInfo>> imageHashMap = new HashMap<>();
 
     private TestLoadImageClass() {}

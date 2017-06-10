@@ -22,7 +22,7 @@ public class MapImageProcessHandler extends Handler {
     final public static int CHECK_LATLNG = 2;
 
     final private HashMap<Point, HashMap<LatLng, ImageInfo>> imageHashMap = new HashMap<>();
-    final private static MapImageProcessHandler instance = new MapImageProcessHandler();
+    private static MapImageProcessHandler instance;// = new MapImageProcessHandler();
     private MapImageProcessHandler() {}
     public static MapImageProcessHandler GetInstance() { return instance; }
 

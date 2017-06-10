@@ -23,7 +23,7 @@ public class RestHttpClient {
 
     public static void SetServerInfo(String domain, int port) {
 
-        BASE_URL = String.format("http://%s:%d", domain, port);
+        BASE_URL = String.format("http://%s:%d/", domain, port);
         Log.d("TAG", String.format("Server Base Url Init Done: %s", BASE_URL));
     }
 
