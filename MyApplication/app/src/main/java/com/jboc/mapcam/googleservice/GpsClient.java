@@ -26,14 +26,19 @@ import com.google.android.gms.maps.model.LatLng;
 public class GpsClient implements GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
-    final private GoogleApiClient googleApiClient;
-    final private Activity currentActivity;
-    final private GpsCallbackInterface gpsCallbackInterface;
+    private GoogleApiClient googleApiClient;
+    private Activity currentActivity;
+    private GpsCallbackInterface gpsCallbackInterface;
 
-    public GpsClient(Activity activity, final GpsCallbackInterface gpsCallbackInterface) {
+    final private static GpsClient instance = new GpsClient();
+    public static GpsClient GetInstance() { return instance; }
 
-        currentActivity = activity;
-        this.gpsCallbackInterface = gpsCallbackInterface;
+    private GpsClient() {}
+
+    public void Init(final Activity activity, final GpsCallbackInterface gpsCallbackInterface) {
+
+        SetActivity(activity);
+        SetCallback(gpsCallbackInterface);
 
         googleApiClient = new GoogleApiClient
                 .Builder(currentActivity)
@@ -42,11 +47,28 @@ public class GpsClient implements GoogleApiClient.ConnectionCallbacks,
                 .addApi(LocationServices.API)
                 .build();
 
-        googleApiClient.connect();
+        ConnectGps();
+    }
+
+    public void SetActivity(Activity activity) {
+
+        currentActivity = activity;
+    }
+
+    public void SetCallback(GpsCallbackInterface gpsCallbackInterface) {
+
+        this.gpsCallbackInterface = gpsCallbackInterface;
     }
 
     private LatLng lastLatLng;
     private LocationRequest locationRequest;
+
+    public LatLng GetLastLatLng() { return lastLatLng; }
+
+    public void ConnectGps() {
+
+        googleApiClient.connect();
+    }
 
     public void CloseGps() {
 
@@ -106,7 +128,11 @@ public class GpsClient implements GoogleApiClient.ConnectionCallbacks,
         }
 
         lastLatLng = new LatLng(location.getLatitude(), location.getLongitude());
-        gpsCallbackInterface.OnConnected(lastLatLng);
+
+
+
+        if (gpsCallbackInterface != null)
+            gpsCallbackInterface.OnConnected(lastLatLng);
     }
 
     @Override

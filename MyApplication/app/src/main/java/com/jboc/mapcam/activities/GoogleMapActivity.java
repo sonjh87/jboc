@@ -53,7 +53,7 @@ public class GoogleMapActivity extends FragmentActivity {
     }
 
     private void InitGoogleApiClient(){
-
+/*
         googleApiClient = new GpsClient(this, new GpsCallbackInterface() {
             @Override
             public void OnConnected(LatLng latLng) {
@@ -67,7 +67,7 @@ public class GoogleMapActivity extends FragmentActivity {
 
                 mapClient.LocationChanged(latLng);
             }
-        });
+        });*/
         super.onStart();
     }
 

@@ -1,12 +1,19 @@
 package com.jboc.mapcam.activities;
 
 import android.app.Activity;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Message;
 import android.os.Parcel;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.ListAdapter;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
+import com.jboc.mapcam.ImageAdapter;
 import com.jboc.mapcam.MainActivity;
 import com.jboc.mapcam.R;
 import com.jboc.mapcam.googleservice.GpsCallbackInterface;
@@ -28,37 +35,24 @@ import cz.msebera.android.httpclient.Header;
 
 public class HomeActivity extends Activity {
 
+    private GridView gridView;
+    private ImageAdapter imageAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
+        SetLayout();
 
-        ImageView imageView = (ImageView) findViewById(R.id.imageView);
-        imageView.setImageResource(R.drawable.cast_mini_controller_gradient_light);
-
-        MainActivity.SetButton(HomeActivity.this, R.id.home_button, R.id.album_button, R.id.map_button);
-
-        /*GpsClient gpsClient = new GpsClient(this, new GpsCallbackInterface() {
-            @Override
-            public void OnConnected(LatLng latLng) {
-
-                GetImageFromServer(latLng);
-            }
-
-            @Override
-            public void OnLocationChanged(LatLng latLng) {
-
-            }
-        });*/
-        GetImageFromServer();
+        GetMyImageFromServer();
     }
 
-    private void GetImageFromServer() {
+    private void GetMyImageFromServer() {
 
+        //TODO - Get Lat and Lng From GpsCLient When we send to server
+        //GpsClient.GetInstance().GetLastLatLng();
         //String url = String.format("image_list/my/get?latitude=%d&longitude=%d", latLng.latitude, latLng.longitude);
         String url = String.format("image_list/my/");
-        //String url = String.format("");
         RestHttpClient.Get(url, new RequestParams(), new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
@@ -78,6 +72,7 @@ public class HomeActivity extends Activity {
                     try {
                         Integer jObject = (Integer)jsonArray.getInt(0);  // JSONObject 추출
                         Message msg = new Message();
+                        msg.what = HomeProcessHandler.GET_IMAGE_FROM_SERVER;
                         msg.obj = new Long(jObject);
                         HomeProcessHandler.GetInstance().sendMessage(msg);
                     } catch (JSONException e) {
@@ -90,7 +85,46 @@ public class HomeActivity extends Activity {
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
 
                 int errorCode = statusCode;
+
+                for (int i = 0; i < 1000; i++) {
+
+                    Message msg = new Message();
+                    msg.what = HomeProcessHandler.GET_IMAGE_FROM_SERVER;
+                    msg.obj = i;
+                    HomeProcessHandler.GetInstance().sendMessage(msg);
+                }
             }
         });
+    }
+
+    private void SetLayout() {
+
+        HomeProcessHandler.GetInstance().SetHomeActivity(this);
+        setContentView(R.layout.activity_home);
+        SetGridView();
+        MainActivity.SetButton(HomeActivity.this, R.id.home_button, R.id.album_button, R.id.map_button);
+    }
+
+    private void SetGridView() {
+
+        gridView = (GridView) findViewById(R.id.image_grid_view);
+        imageAdapter = new ImageAdapter(HomeActivity.this);
+        gridView.setAdapter(imageAdapter);
+
+        UpdateGridView(MainActivity.icon);
+
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                Toast.makeText(HomeActivity.this, "" + position, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    public void UpdateGridView(Bitmap bitmap) {
+
+        imageAdapter.notifyDataSetChanged();
+        imageAdapter.AddImageToList(bitmap);
     }
 }

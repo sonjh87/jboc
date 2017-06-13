@@ -2,20 +2,19 @@ package com.jboc.mapcam;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
-import com.google.android.gms.maps.model.LatLng;
 import com.jboc.mapcam.activities.AlbumActivity;
 import com.jboc.mapcam.activities.GoogleMapActivity;
 import com.jboc.mapcam.activities.HomeActivity;
-import com.jboc.mapcam.googleservice.GpsCallbackInterface;
 import com.jboc.mapcam.googleservice.GpsClient;
 import com.jboc.mapcam.http.RestHttpClient;
-import com.jboc.mapcam.mapactivity.TestLoadImageClass;
 
 public class MainActivity extends AppCompatActivity{
 
@@ -96,6 +95,9 @@ public class MainActivity extends AppCompatActivity{
     private void InitManager() {
 
         InitHttpClient();
+        InitGpsClient();
+
+
         InitTestImage();
     }
 
@@ -106,8 +108,17 @@ public class MainActivity extends AppCompatActivity{
         RestHttpClient.SetServerInfo(ip, port);
     }
 
+    private void InitGpsClient() {
+
+        GpsClient.GetInstance().Init(this, null);
+    }
+
+    public static Bitmap icon;
+
     private void InitTestImage() {
 
+        icon = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
+/*
         GpsClient gpsClient = new GpsClient(this, new GpsCallbackInterface() {
             @Override
             public void OnConnected(LatLng latLng) {
@@ -120,6 +131,6 @@ public class MainActivity extends AppCompatActivity{
 
             }
         });
-        gpsClient.CloseGps();
+        gpsClient.CloseGps();*/
     }
 }
